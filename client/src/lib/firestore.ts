@@ -20,13 +20,18 @@ export class FirestoreService {
     userId: string,
     transaction: InsertTransaction
   ): Promise<string> {
-    const docRef = await addDoc(collection(db, TRANSACTIONS_COLLECTION), {
-      ...transaction,
-      userId,
-      createdAt: Timestamp.now().toDate().toISOString(),
-      updatedAt: Timestamp.now().toDate().toISOString(),
-    });
-    return docRef.id;
+    try {
+      const docRef = await addDoc(collection(db, TRANSACTIONS_COLLECTION), {
+        ...transaction,
+        userId,
+        createdAt: Timestamp.now().toDate().toISOString(),
+        updatedAt: Timestamp.now().toDate().toISOString(),
+      });
+      return docRef.id;
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      throw error;
+    }
   }
 
   static async updateTransaction(
@@ -46,17 +51,22 @@ export class FirestoreService {
   }
 
   static async getUserTransactions(userId: string): Promise<Transaction[]> {
-    const q = query(
-      collection(db, TRANSACTIONS_COLLECTION),
-      where("userId", "==", userId),
-      orderBy("date", "desc")
-    );
-    
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Transaction[];
+    try {
+      const q = query(
+        collection(db, TRANSACTIONS_COLLECTION),
+        where("userId", "==", userId),
+        orderBy("date", "desc")
+      );
+      
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Transaction[];
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      throw error;
+    }
   }
 
   static async getTransactionsByDateRange(

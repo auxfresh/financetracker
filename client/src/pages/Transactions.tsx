@@ -42,8 +42,8 @@ export default function Transactions() {
   const [deleting, setDeleting] = useState(false);
 
   // Filters
-  const [typeFilter, setTypeFilter] = useState<string>("");
-  const [categoryFilter, setCategoryFilter] = useState<string>("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
 
@@ -70,8 +70,8 @@ export default function Transactions() {
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter((transaction) => {
-      if (typeFilter && transaction.type !== typeFilter) return false;
-      if (categoryFilter && transaction.category !== categoryFilter) return false;
+      if (typeFilter && typeFilter !== "all" && transaction.type !== typeFilter) return false;
+      if (categoryFilter && categoryFilter !== "all" && transaction.category !== categoryFilter) return false;
       if (fromDate && transaction.date < fromDate) return false;
       if (toDate && transaction.date > toDate) return false;
       return true;
@@ -175,7 +175,7 @@ export default function Transactions() {
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Types</SelectItem>
+                  <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="income">Income</SelectItem>
                   <SelectItem value="expense">Expense</SelectItem>
                 </SelectContent>
@@ -188,7 +188,7 @@ export default function Transactions() {
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   {[...categories.income, ...categories.expense].map((category) => (
                     <SelectItem key={category.value} value={category.value}>
                       {category.label}

@@ -52,19 +52,26 @@ export class FirestoreService {
 
   static async getUserTransactions(userId: string): Promise<Transaction[]> {
     try {
+      // First try to get transactions without ordering to see if collection exists
       const q = query(
         collection(db, TRANSACTIONS_COLLECTION),
-        where("userId", "==", userId),
-        orderBy("date", "desc")
+        where("userId", "==", userId)
       );
       
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map((doc) => ({
+      const transactions = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as Transaction[];
+      
+      // Sort by date locally since ordering might fail on empty collection
+      return transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     } catch (error) {
       console.error("Error fetching transactions:", error);
+      // Return empty array if collection doesn't exist yet
+      if (error.code === "failed-precondition" || error.code === "permission-denied") {
+        return [];
+      }
       throw error;
     }
   }

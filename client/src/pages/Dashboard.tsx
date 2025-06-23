@@ -20,8 +20,8 @@ import {
   Plus,
 } from "lucide-react";
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   ResponsiveContainer,
@@ -240,19 +240,17 @@ export default function Dashboard() {
             <div className="h-64">
               {chartData.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip formatter={(value) => [`$${value}`, 'Spending']} />
-                    <Line
-                      type="monotone"
+                    <Bar
                       dataKey="spending"
-                      stroke="#3B82F6"
-                      strokeWidth={2}
-                      dot={{ fill: "#3B82F6", strokeWidth: 2 }}
+                      fill="#3B82F6"
+                      radius={[4, 4, 0, 0]}
                     />
-                  </LineChart>
+                  </BarChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="flex items-center justify-center h-full text-muted-foreground">

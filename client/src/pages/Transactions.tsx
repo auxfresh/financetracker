@@ -173,9 +173,7 @@ export default function Transactions() {
             </SelectContent>
           </Select>
           <Button onClick={() => setModalOpen(true)} size="sm" className="text-sm">
-            <Plus className="w-4 h-4 sm:mr-2" />
-            <span className="hidden sm:inline">Add Transaction</span>
-            <span className="sm:hidden">Add</span>
+            <Plus className="w-4 h-4" />
           </Button>
         </div>
       </div>

@@ -40,8 +40,6 @@ import {
   Tooltip,
   CartesianGrid,
   Legend,
-  LineChart,
-  Line,
 } from "recharts";
 import { categories } from "@shared/schema";
 

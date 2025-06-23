@@ -20,7 +20,7 @@ function AppContent() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="w-16 h-16 mx-auto mb-4">
-            <img src="/logo.png" alt="Finance Manager Logo" className="w-full h-full object-contain" />
+            <img src="/logo.svg" alt="Finance Manager Logo" className="w-full h-full object-contain" />
           </div>
           <p className="text-sm text-muted-foreground">Loading...</p>
         </div>

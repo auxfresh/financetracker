@@ -119,7 +119,7 @@ export default function Auth() {
         <CardContent className="pt-6">
           <div className="text-center mb-8">
             <div className="w-16 h-16 mx-auto mb-4">
-              <img src="/logo.png" alt="Finance Manager Logo" className="w-full h-full object-contain" />
+              <img src="/logo.svg" alt="Finance Manager Logo" className="w-full h-full object-contain" />
             </div>
             <h1 className="text-2xl font-medium text-foreground">Finance Manager</h1>
             <p className="text-muted-foreground mt-2">Track your expenses and income</p>

@@ -28,7 +28,8 @@ import { useToast } from "@/hooks/use-toast";
 import TransactionModal from "@/components/TransactionModal";
 import type { Transaction } from "@shared/schema";
 import { categories } from "@shared/schema";
-import { Plus, Edit, Trash2, ShoppingCart, Briefcase, Car } from "lucide-react";
+import { Plus, Edit, Trash2, ShoppingCart, Briefcase, Car, Download } from "lucide-react";
+import { exportToTXT, exportToPDF } from "@/lib/exportUtils";
 
 export default function Transactions() {
   const { user } = useAuth();
@@ -155,10 +156,27 @@ export default function Transactions() {
           <h1 className="text-2xl font-medium text-foreground">Transactions</h1>
           <p className="text-muted-foreground mt-1">Manage your income and expenses</p>
         </div>
-        <Button onClick={() => setModalOpen(true)}>
-          <Plus className="w-4 h-4 mr-2" />
-          Add Transaction
-        </Button>
+        <div className="flex space-x-2">
+          <Select onValueChange={(format) => {
+            if (format === 'txt') {
+              exportToTXT(filteredTransactions, 'transactions');
+            } else if (format === 'pdf') {
+              exportToPDF(filteredTransactions, 'transactions');
+            }
+          }}>
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Export" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="txt">Export TXT</SelectItem>
+              <SelectItem value="pdf">Export PDF</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button onClick={() => setModalOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Transaction
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}

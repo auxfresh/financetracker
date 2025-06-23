@@ -2,6 +2,13 @@ import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { FirestoreService } from "@/lib/firestore";
 import { useToast } from "@/hooks/use-toast";
@@ -18,7 +25,9 @@ import {
   Briefcase,
   Car,
   Plus,
+  Download,
 } from "lucide-react";
+import { exportToTXT, exportToPDF } from "@/lib/exportUtils";
 import {
   BarChart,
   Bar,
@@ -31,6 +40,8 @@ import {
   Tooltip,
   CartesianGrid,
   Legend,
+  LineChart,
+  Line,
 } from "recharts";
 import { categories } from "@shared/schema";
 
@@ -187,10 +198,27 @@ export default function Dashboard() {
           <h1 className="text-2xl font-medium text-foreground">Dashboard</h1>
           <p className="text-muted-foreground mt-1">Overview of your financial activity</p>
         </div>
-        <Button onClick={() => setModalOpen(true)}>
-          <Plus className="w-4 h-4 mr-2" />
-          Add Transaction
-        </Button>
+        <div className="flex space-x-2">
+          <Select onValueChange={(format) => {
+            if (format === 'txt') {
+              exportToTXT(transactions, 'transactions');
+            } else if (format === 'pdf') {
+              exportToPDF(transactions, 'transactions');
+            }
+          }}>
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Export" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="txt">Export TXT</SelectItem>
+              <SelectItem value="pdf">Export PDF</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button onClick={() => setModalOpen(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Transaction
+          </Button>
+        </div>
       </div>
 
       {/* Summary Cards */}

@@ -154,7 +154,7 @@ export default function Transactions() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-medium text-foreground">Transactions</h1>
-          <p className="text-muted-foreground mt-1">Manage your income and expenses</p>
+          <p className="text-muted-foreground mt-1">Manage your transactions</p>
         </div>
         <div className="flex space-x-2">
           <Select onValueChange={(format) => {

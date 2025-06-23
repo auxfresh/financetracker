@@ -73,7 +73,7 @@ export default function Dashboard() {
   };
 
   const currentMonth = new Date().toISOString().slice(0, 7);
-  
+
   const monthlyStats = useMemo(() => {
     const currentMonthTransactions = transactions.filter(
       (t) => t.date.startsWith(currentMonth)
@@ -100,9 +100,9 @@ export default function Dashboard() {
 
   const categoryData = useMemo(() => {
     if (transactions.length === 0) return [];
-    
+
     const categoryTotals = new Map<string, number>();
-    
+
     transactions
       .filter((t) => t.type === "expense" && t.date && t.date.startsWith(currentMonth))
       .forEach((t) => {
@@ -124,23 +124,23 @@ export default function Dashboard() {
   const chartData = useMemo(() => {
     const last6Months = [];
     const now = new Date();
-    
+
     for (let i = 5; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthKey = date.toISOString().slice(0, 7);
       const monthName = date.toLocaleDateString('en-US', { month: 'short' });
-      
+
       const monthTransactions = transactions.filter(t => t.date && t.date.startsWith(monthKey));
       const expenses = monthTransactions
         .filter(t => t.type === "expense")
         .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
-      
+
       last6Months.push({
         month: monthName,
         spending: Number(expenses.toFixed(2)),
       });
     }
-    
+
     // Add some sample data if no transactions exist to show chart structure
     const hasData = last6Months.some(month => month.spending > 0);
     if (!hasData && transactions.length === 0) {
@@ -153,7 +153,7 @@ export default function Dashboard() {
         { month: 'Jun', spending: 0 },
       ];
     }
-    
+
     return last6Months;
   }, [transactions]);
 
@@ -161,7 +161,7 @@ export default function Dashboard() {
 
   const getTransactionIcon = (category: string, type: string) => {
     if (type === "income") return <Briefcase className="w-4 h-4 text-green-600" />;
-    
+
     switch (category) {
       case "food": return <ShoppingCart className="w-4 h-4 text-red-500" />;
       case "transport": return <Car className="w-4 h-4 text-yellow-600" />;
@@ -190,7 +190,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-medium text-foreground">Dashboard</h1>

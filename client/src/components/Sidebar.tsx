@@ -38,7 +38,7 @@ export default function Sidebar() {
         </div>
         <h1 className="ml-3 text-xl font-medium">Finance Manager</h1>
       </div>
-      
+
       <nav className="mt-6 flex-1">
         {navigation.map((item) => {
           const isActive = location === item.href;
@@ -63,28 +63,28 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="p-6 border-t">
-        <div className="flex items-center mb-4">
-          <Avatar>
-            <AvatarFallback>
-              {user?.name?.charAt(0)?.toUpperCase() || "U"}
-            </AvatarFallback>
-          </Avatar>
-          <div className="ml-3">
-            <p className="text-sm font-medium">{user?.name}</p>
-            <p className="text-xs text-muted-foreground">{user?.email}</p>
+      <div className="p-4 sm:p-6 border-t">
+          <div className="flex items-center mb-4">
+            <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
+              <AvatarFallback className="text-sm">
+                {user?.name?.charAt(0)?.toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="ml-3 min-w-0 flex-1">
+              <p className="text-sm font-medium truncate">{user?.name}</p>
+              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+            </div>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-sm"
+            onClick={handleLogout}
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
+          </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-full justify-start"
-          onClick={handleLogout}
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Sign Out
-        </Button>
-      </div>
     </>
   );
 

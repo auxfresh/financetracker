@@ -113,8 +113,6 @@ export default function Dashboard() {
   }, [transactions, currentMonth]);
 
   const chartData = useMemo(() => {
-    if (transactions.length === 0) return [];
-    
     const last6Months = [];
     const now = new Date();
     
@@ -132,6 +130,19 @@ export default function Dashboard() {
         month: monthName,
         spending: Number(expenses.toFixed(2)),
       });
+    }
+    
+    // Add some sample data if no transactions exist to show chart structure
+    const hasData = last6Months.some(month => month.spending > 0);
+    if (!hasData && transactions.length === 0) {
+      return [
+        { month: 'Jan', spending: 0 },
+        { month: 'Feb', spending: 0 },
+        { month: 'Mar', spending: 0 },
+        { month: 'Apr', spending: 0 },
+        { month: 'May', spending: 0 },
+        { month: 'Jun', spending: 0 },
+      ];
     }
     
     return last6Months;
@@ -238,25 +249,20 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="h-64">
-              {chartData.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => [`$${value}`, 'Spending']} />
-                    <Bar
-                      dataKey="spending"
-                      fill="#3B82F6"
-                      radius={[4, 4, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                  No spending data available yet
-                </div>
-              )}</div>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip formatter={(value) => [`$${value}`, 'Spending']} />
+                  <Bar
+                    dataKey="spending"
+                    fill="#3B82F6"
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 

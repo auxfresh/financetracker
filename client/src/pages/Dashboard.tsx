@@ -28,6 +28,9 @@ import {
   PieChart,
   Pie,
   Cell,
+  Tooltip,
+  CartesianGrid,
+  Legend,
 } from "recharts";
 import { categories } from "@shared/schema";
 
@@ -87,25 +90,31 @@ export default function Dashboard() {
   }, [transactions]);
 
   const categoryData = useMemo(() => {
+    if (transactions.length === 0) return [];
+    
     const categoryTotals = new Map<string, number>();
     
     transactions
-      .filter((t) => t.type === "expense" && t.date.startsWith(currentMonth))
+      .filter((t) => t.type === "expense" && t.date && t.date.startsWith(currentMonth))
       .forEach((t) => {
         const current = categoryTotals.get(t.category) || 0;
-        categoryTotals.set(t.category, current + t.amount);
+        categoryTotals.set(t.category, current + (Number(t.amount) || 0));
       });
 
-    return Array.from(categoryTotals.entries()).map(([category, amount]) => {
-      const categoryInfo = categories.expense.find(c => c.value === category);
-      return {
-        name: categoryInfo?.label || category,
-        value: amount,
-      };
-    });
+    return Array.from(categoryTotals.entries())
+      .filter(([, amount]) => amount > 0)
+      .map(([category, amount]) => {
+        const categoryInfo = categories.expense.find(c => c.value === category);
+        return {
+          name: categoryInfo?.label || category,
+          value: Number(amount.toFixed(2)),
+        };
+      });
   }, [transactions, currentMonth]);
 
   const chartData = useMemo(() => {
+    if (transactions.length === 0) return [];
+    
     const last6Months = [];
     const now = new Date();
     
@@ -114,14 +123,14 @@ export default function Dashboard() {
       const monthKey = date.toISOString().slice(0, 7);
       const monthName = date.toLocaleDateString('en-US', { month: 'short' });
       
-      const monthTransactions = transactions.filter(t => t.date.startsWith(monthKey));
+      const monthTransactions = transactions.filter(t => t.date && t.date.startsWith(monthKey));
       const expenses = monthTransactions
         .filter(t => t.type === "expense")
-        .reduce((sum, t) => sum + t.amount, 0);
+        .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
       
       last6Months.push({
         month: monthName,
-        spending: expenses,
+        spending: Number(expenses.toFixed(2)),
       });
     }
     
@@ -229,20 +238,27 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Line
-                    type="monotone"
-                    dataKey="spending"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth={2}
-                    dot={{ fill: "hsl(var(--primary))" }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+              {chartData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip formatter={(value) => [`$${value}`, 'Spending']} />
+                    <Line
+                      type="monotone"
+                      dataKey="spending"
+                      stroke="#3B82F6"
+                      strokeWidth={2}
+                      dot={{ fill: "#3B82F6", strokeWidth: 2 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground">
+                  No spending data available yet
+                </div>
+              )}</div>
           </CardContent>
         </Card>
 
@@ -263,11 +279,13 @@ export default function Dashboard() {
                       outerRadius={80}
                       paddingAngle={5}
                       dataKey="value"
+                      label={({ name, value }) => `${name}: $${value.toFixed(2)}`}
                     >
                       {categoryData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
+                    <Tooltip formatter={(value) => [`$${value}`, 'Amount']} />
                   </PieChart>
                 </ResponsiveContainer>
               ) : (

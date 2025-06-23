@@ -116,7 +116,7 @@ export default function TransactionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[95vw] max-w-md mx-auto">
         <DialogHeader>
           <DialogTitle>
             {transaction ? "Edit Transaction" : "Add Transaction"}

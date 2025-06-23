@@ -212,9 +212,10 @@ export default function Dashboard() {
               <SelectItem value="pdf">Export PDF</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={() => setModalOpen(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Transaction
+          <Button onClick={() => setModalOpen(true)} size="sm" className="text-sm">
+            <Plus className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Add Transaction</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </div>
       </div>

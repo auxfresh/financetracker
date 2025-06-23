@@ -33,8 +33,8 @@ export default function Sidebar() {
   const SidebarContent = () => (
     <>
       <div className="flex items-center px-6 py-4 border-b">
-        <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center p-1">
-          <img src="/logo.svg" alt="Finance Manager Logo" className="w-full h-full object-contain" />
+        <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+          <LayoutDashboard className="h-6 w-6 text-primary-foreground" />
         </div>
         <h1 className="ml-3 text-xl font-medium">Finance Manager</h1>
       </div>

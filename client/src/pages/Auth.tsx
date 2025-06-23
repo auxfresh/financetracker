@@ -118,8 +118,8 @@ export default function Auth() {
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto mb-4">
-              <img src="/logo.svg" alt="Finance Manager Logo" className="w-full h-full object-contain" />
+            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+              <LayoutDashboard className="text-primary-foreground text-2xl" />
             </div>
             <h1 className="text-2xl font-medium text-foreground">Finance Manager</h1>
             <p className="text-muted-foreground mt-2">Track your expenses and income</p>
